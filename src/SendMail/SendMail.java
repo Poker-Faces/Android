@@ -41,6 +41,13 @@ public class SendMail {
 
 	private void startService() throws IOException {
 		server = new ServerSocket(port);// port为sdk工程里监听的端口号，需要保持一致
+		while (true) {
+			Socket socket = server.accept();
+			DataInputStream dos = new DataInputStream(socket.getInputStream());
+			String content = dos.readUTF();// 获取socket返回的内容
+			Mail.sendAndCc(smtp, from, to, copyto, subject, content, username,
+					password);// 将异常结果发送邮件通知
+		}
 	}
 
 }
